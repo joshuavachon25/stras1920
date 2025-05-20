@@ -1,0 +1,104 @@
+---
+import Main from "../layout/Main.astro";
+---
+
+<Main >
+	<div class="absolute top-4 left-4 w-80 collapse bg-base-100 border-base-300 border">
+		<input type="checkbox" />
+		<div class="collapse-title font-semibold">À propos</div>
+		<div class="collapse-content text-sm">
+
+		</div>
+	</div>
+	<div class="absolute top-4 right-4 w-40 collapse bg-base-100 border-base-300 border">
+		<input type="checkbox" checked/>
+		<div class="collapse-title font-semibold">Légende</div>
+		<div class="collapse-content text-sm">
+			<div class="flex flex-col">
+				<div class="flex">
+					<div class="w-4 h-4 bg-yellow-400 mx-2"></div>
+					<p class="flex-grow">Batiment</p>
+				</div>
+				<div class="flex">
+					<div class="w-4 h-4 bg-green-200 mx-2"></div>
+					<p class="flex-grow">Fortifications</p>
+				</div>
+				<div class="flex">
+					<div class="w-4 h-4 bg-green-400 mx-2"></div>
+					<p class="flex-grow">Végétation</p>
+				</div>
+				<div class="flex">
+					<div class="w-4 h-4 bg-red-400 mx-2"></div>
+					<p class="flex-grow">Hopital</p>
+				</div>
+
+
+			</div>
+
+		</div>
+	</div>
+	<div id="map" class="min-h-screen"></div>
+</Main>
+
+<script>
+    import maplibregl from 'maplibre-gl'
+    const map = new maplibregl.Map({
+        container: 'map',
+        style:
+            'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
+        center: [7.756836,48.585316],
+        zoom: 14,
+        attributionControl: false
+    });
+
+    map.on('load', () => {
+        const layers = map.getStyle().layers;
+
+        layers.forEach((layer) => {
+            if (layer.type === 'symbol' || layer.type === 'line' || (layer['source-layer'] && layer['source-layer'].includes('building')) ) {
+                map.setLayoutProperty(layer.id, 'visibility', 'none');
+            }
+        });
+
+        map.addSource('sol', {
+            type: 'geojson',
+            data: '/data/1920_sol.geojson'
+        })
+        map.addSource('rues', {
+            type: 'geojson',
+            data: '/data/Rues1920.geojson'
+        })
+        map.addLayer({
+            'id': 'sol',
+            'type': 'fill',
+            'source': 'sol',
+            'paint': {
+                'fill-color': [
+                    'match',
+                    ['get', 'type'],
+                    'Batiment', '#e8ce59',
+                    'Vert', '#91c167',
+                    'Fortification', '#dce6d5',
+                    'Eau', '#b6ecf6',
+                    'Monument', '#000000',
+                    'Train', '#c4c4c4',
+                    'Hopital', '#e75f78',
+                    '#cccccc'
+                ],
+                'fill-opacity': 0.99,
+            }
+        })
+        map.addLayer({
+            'id': 'rues',
+            'type': 'symbol',
+            'source': 'rues',
+            "minzoom": 13.9,
+            "layout": {
+                "text-field": ["to-string", ["get", "NOM1"]],
+                "symbol-placement": "line-center",
+                "text-size": 12
+            },
+        })
+
+    });
+</script>
