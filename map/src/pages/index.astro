@@ -42,6 +42,7 @@ import Main from "../layout/Main.astro";
 
 <script>
     import maplibregl from 'maplibre-gl'
+	const colors = ['#fed976', '#feb24c', '#fd8d3c', '#fc4e2a', '#e31a1c', '#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c'];
     const map = new maplibregl.Map({
         container: 'map',
         style:
@@ -51,54 +52,157 @@ import Main from "../layout/Main.astro";
         attributionControl: false
     });
 
+	map.addControl(new maplibregl.NavigationControl());
+
+
+	for (let i = 1; i <= 12; i++) {
+		const url = `/assets/sprites/${i}.png`
+		fetch(url)
+			.then((res) => res.blob())
+			.then((blob) => createImageBitmap(blob))
+			.then((imageBitmap) => {
+				if (!map.hasImage(`icon-${i}`)) {
+					map.addImage(`icon-${i}`, imageBitmap, { pixelRatio: 2 });
+				}
+			})
+			.catch((err) => console.error(`Failed to load icon-${i}`, err));
+	}
+
     map.on('load', () => {
-        const layers = map.getStyle().layers;
+		const layers = map.getStyle().layers;
 
-        layers.forEach((layer) => {
-            if (layer.type === 'symbol' || layer.type === 'line' || (layer['source-layer'] && layer['source-layer'].includes('building')) ) {
-                map.setLayoutProperty(layer.id, 'visibility', 'none');
-            }
-        });
+		layers.forEach((layer) => {
+			if (layer.type === 'symbol' || layer.type === 'line' || (layer['source-layer'] && layer['source-layer'].includes('building'))) {
+				map.setLayoutProperty(layer.id, 'visibility', 'none');
+			}
+		});
 
-        map.addSource('sol', {
-            type: 'geojson',
-            data: '/data/1920_sol.geojson'
-        })
-        map.addSource('rues', {
-            type: 'geojson',
-            data: '/data/Rues1920.geojson'
-        })
-        map.addLayer({
-            'id': 'sol',
-            'type': 'fill',
-            'source': 'sol',
-            'paint': {
-                'fill-color': [
-                    'match',
-                    ['get', 'type'],
-                    'Batiment', '#e8ce59',
-                    'Vert', '#91c167',
-                    'Fortification', '#dce6d5',
-                    'Eau', '#b6ecf6',
-                    'Monument', '#000000',
-                    'Train', '#c4c4c4',
-                    'Hopital', '#e75f78',
-                    '#cccccc'
-                ],
-                'fill-opacity': 0.99,
-            }
-        })
-        map.addLayer({
-            'id': 'rues',
-            'type': 'symbol',
-            'source': 'rues',
-            "minzoom": 13.9,
-            "layout": {
-                "text-field": ["to-string", ["get", "NOM1"]],
-                "symbol-placement": "line-center",
-                "text-size": 12
-            },
-        })
+		map.addSource('sol', {
+			type: 'geojson',
+			data: '/data/1920_sol.geojson'
+		})
+		map.addSource('rues', {
+			type: 'geojson',
+			data: '/data/Rues1920.geojson'
+		})
+		map.addSource('boire', {
+			type: 'geojson',
+			data: '/data/Boire1920.geojson',
+			cluster: false,
+			clusterRadius: 80,
+			clusterProperties: {
+				// keep separate counts for each magnitude category in a cluster
+				'cat1': ['+', ['case', ['==', ['get', 'Categorie'], 1], 1, 0]],
+				'cat2': ['+', ['case', ['==', ['get', 'Categorie'], 2], 1, 0]],
+				'cat3': ['+', ['case', ['==', ['get', 'Categorie'], 3], 1, 0]],
+				'cat4': ['+', ['case', ['==', ['get', 'Categorie'], 4], 1, 0]],
+				'cat5': ['+', ['case', ['==', ['get', 'Categorie'], 5], 1, 0]],
+				'cat6': ['+', ['case', ['==', ['get', 'Categorie'], 6], 1, 0]],
+				'cat7': ['+', ['case', ['==', ['get', 'Categorie'], 7], 1, 0]],
+				'cat8': ['+', ['case', ['==', ['get', 'Categorie'], 8], 1, 0]],
+				'cat9': ['+', ['case', ['==', ['get', 'Categorie'], 9], 1, 0]],
+				'cat10': ['+', ['case', ['==', ['get', 'Categorie'], 10], 1, 0]],
+				'cat11': ['+', ['case', ['==', ['get', 'Categorie'], 11], 1, 0]],
+				'cat12': ['+', ['case', ['==', ['get', 'Categorie'], 12], 1, 0]],
+			}
+		})
 
-    });
+
+		const sol: maplibregl.FillLayerSpecification = {
+			id: 'sol',
+			type: 'fill',
+			source: 'sol',
+			paint: {
+				'fill-color': [
+					'match',
+					['get', 'type'],
+					'Batiment', '#e8ce59',
+					'Vert', '#91c167',
+					'Fortification', '#dce6d5',
+					'Eau', '#b6ecf6',
+					'Monument', '#000000',
+					'Train', '#c4c4c4',
+					'Hopital', '#e75f78',
+					'#cccccc'
+				] as any,
+				'fill-opacity': 0.99
+			}
+		}
+		const rues: maplibregl.SymbolLayerSpecification = {
+			'id': 'rues',
+			'type': 'symbol',
+			'source': 'rues',
+			"minzoom": 13.9,
+			"layout": {
+				"text-field": ["to-string", ["get", "NOM1"]],
+				"symbol-placement": "line-center",
+				"text-size": 12
+			},
+		}
+
+
+		const boire: maplibregl.CircleLayerSpecification = {
+			id: 'boire',
+			type: 'circle',
+			source: 'boire',
+			//filter: ['!', ['has', 'point_count']],
+			paint: {
+				'circle-color': [
+					'match',
+					['get', 'Categorie'],
+					1, '#6b81d7',
+					2, '#91c167',
+					3, '#496e2f',
+					4, '#043e47',
+					5, '#6e1414',
+					6, '#9c5e33',
+					7, '#e75f78',
+					8, '#1e848a',
+					9, '#f7a2af',
+					10, '#e75f78',
+					11, '#bda06b',
+					12, '#9b59b6',
+					'#cccccc'
+				] as any,
+				'circle-opacity': 0.8,
+				'circle-radius': 6
+			}
+		};
+
+		map.addLayer(sol)
+		map.addLayer(rues)
+		map.addLayer(boire)
+
+		map.on('click', 'boire', (e) => {
+			const feature = e.features?.[0];
+			const coordinates = feature.geometry.coordinates.slice();
+			const name = feature.properties?.Nom || 'Sans nom';
+
+			new maplibregl.Popup()
+				.setLngLat(coordinates)
+				.setHTML(`<strong>${name}</strong>`)
+				.addTo(map);
+		});
+		map.on('mouseenter', 'boire', () => map.getCanvas().style.cursor = 'pointer');
+		map.on('mouseleave', 'boire', () => map.getCanvas().style.cursor = '');
+	})
+
 </script>
+
+<style>
+	#map {
+		height: 100vh;
+		width: 100%;
+		overflow: hidden;
+	}
+
+	.mapboxgl-popup-content {
+		max-width: 250px;
+		pointer-events: auto;
+		background-color: white;
+	}
+
+	.mapboxgl-popup {
+		z-index: 1000;
+	}
+</style>
