@@ -3,12 +3,37 @@ import Main from "../layout/Main.astro";
 ---
 
 <Main >
-	<div class="absolute top-4 left-4 w-80 collapse bg-base-100 border-base-300 border">
-		<input type="checkbox" />
-		<div class="collapse-title font-semibold">À propos</div>
-		<div class="collapse-content text-sm">
+	<div class="h-screen w-screen overflow-hidden">
 
+
+	<div class="absolute top-4 left-4 w-80">
+		<div class="collapse collapse-plus bg-base-100 border border-base-300">
+			<input type="radio" name="my-accordion-3" checked="checked" />
+			<div class="collapse-title font-semibold">À propos</div>
+			<div class="collapse-content text-sm">Bientôt disponible</div>
 		</div>
+		<div class="collapse collapse-plus bg-base-100 border border-base-300">
+			<input type="radio" name="my-accordion-3" />
+			<div class="collapse-title font-semibold">Couches de données</div>
+			<div class="collapse-content text-sm flex flex-col">
+				<label><input type="checkbox" id="check_1"> Articles de brasserie</label>
+				<label><input type="checkbox" id="check_2"> Grossistes de vins</label>
+				<label><input type="checkbox" id="check_3"> Débits de vins</label>
+				<label><input type="checkbox" id="check_4"> Brasseurs</label>
+				<label><input type="checkbox" id="check_5"> Entrepôts/Négociants de bières</label>
+				<label><input type="checkbox" id="check_6"> Cidreries</label>
+				<label><input type="checkbox" id="check_7"> Distilleries</label>
+				<label><input type="checkbox" id="check_8"> Marchands d'houblons</label>
+				<label><input type="checkbox" id="check_9"> Malterie</label>
+				<label><input type="checkbox" id="check_10"> Tonnelier</label>
+				<label><input type="checkbox" id="check_11" disabled class="disabled"> Café-Brasserie</label>
+				<label><input type="checkbox" id="check_12" disabled> Café-Bars</label>
+			</div>
+		</div>
+	</div>
+	<div class="absolute bottom-4 left-4 p-10 bg-base-100 border border-base-300">
+		<div class="font-semibold" id="description_popup_name">Information sur la donnée</div>
+		<div class="text-sm" id="description_popup_desc">Sélectionnez une couche de données, puis cliquez sur une entité sur la carte</div>
 	</div>
 	<div class="absolute top-4 right-4 w-40 collapse bg-base-100 border-base-300 border">
 		<input type="checkbox" checked/>
@@ -37,38 +62,46 @@ import Main from "../layout/Main.astro";
 
 		</div>
 	</div>
-	<div id="map" class="min-h-screen"></div>
+	<div id="map" class="h-full w-auto"></div>
+	</div>
 </Main>
 
 <script>
     import maplibregl from 'maplibre-gl'
+	const catName = ['','Magasin d\'articles de brasserie', 'Grossiste de vins et spiritueux', 'Débit de vins', 'Brasseur', 'Entrepot ou négociant de bière', 'Cidrerie', 'Distillerie', 'Marchand d\'Houblons', 'Malterie', 'Tonnelier', 'Café-Brasserie', 'Café-Bars']
+	const popdesc = document.getElementById('description_popup')
+	const popdescn = document.getElementById('description_popup_name')
+	const popdescd = document.getElementById('description_popup_desc')
 	const colors = ['#fed976', '#feb24c', '#fd8d3c', '#fc4e2a', '#e31a1c', '#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c'];
     const map = new maplibregl.Map({
         container: 'map',
-        style:
-            'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
+        style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
         center: [7.756836,48.585316],
         zoom: 14,
         attributionControl: false
     });
 
-	map.addControl(new maplibregl.NavigationControl());
-
-
-	for (let i = 1; i <= 12; i++) {
-		const url = `/assets/sprites/${i}.png`
-		fetch(url)
-			.then((res) => res.blob())
-			.then((blob) => createImageBitmap(blob))
-			.then((imageBitmap) => {
-				if (!map.hasImage(`icon-${i}`)) {
-					map.addImage(`icon-${i}`, imageBitmap, { pixelRatio: 2 });
-				}
-			})
-			.catch((err) => console.error(`Failed to load icon-${i}`, err));
-	}
+	map.addControl(new maplibregl.NavigationControl({
+		visualizePitch: true,
+		visualizeRoll: true,
+		showZoom: true,
+		showCompass: true
+	}));
 
     map.on('load', () => {
+
+		for (let i = 1; i <= 12; i++) {
+			const url = `/assets/sprites/${i}.png`
+			fetch(url)
+				.then((res) => res.blob())
+				.then((blob) => createImageBitmap(blob))
+				.then((imageBitmap) => {
+					if (!map.hasImage(`icon-${i}`)) {
+						map.addImage(`icon-${i}`, imageBitmap, { pixelRatio: 2 });
+					}
+				})
+				.catch((err) => console.error(`Failed to load icon-${i}`, err));
+		}
 		const layers = map.getStyle().layers;
 
 		layers.forEach((layer) => {
@@ -88,25 +121,7 @@ import Main from "../layout/Main.astro";
 		map.addSource('boire', {
 			type: 'geojson',
 			data: '/data/Boire1920.geojson',
-			cluster: false,
-			clusterRadius: 80,
-			clusterProperties: {
-				// keep separate counts for each magnitude category in a cluster
-				'cat1': ['+', ['case', ['==', ['get', 'Categorie'], 1], 1, 0]],
-				'cat2': ['+', ['case', ['==', ['get', 'Categorie'], 2], 1, 0]],
-				'cat3': ['+', ['case', ['==', ['get', 'Categorie'], 3], 1, 0]],
-				'cat4': ['+', ['case', ['==', ['get', 'Categorie'], 4], 1, 0]],
-				'cat5': ['+', ['case', ['==', ['get', 'Categorie'], 5], 1, 0]],
-				'cat6': ['+', ['case', ['==', ['get', 'Categorie'], 6], 1, 0]],
-				'cat7': ['+', ['case', ['==', ['get', 'Categorie'], 7], 1, 0]],
-				'cat8': ['+', ['case', ['==', ['get', 'Categorie'], 8], 1, 0]],
-				'cat9': ['+', ['case', ['==', ['get', 'Categorie'], 9], 1, 0]],
-				'cat10': ['+', ['case', ['==', ['get', 'Categorie'], 10], 1, 0]],
-				'cat11': ['+', ['case', ['==', ['get', 'Categorie'], 11], 1, 0]],
-				'cat12': ['+', ['case', ['==', ['get', 'Categorie'], 12], 1, 0]],
-			}
 		})
-
 
 		const sol: maplibregl.FillLayerSpecification = {
 			id: 'sol',
@@ -145,7 +160,6 @@ import Main from "../layout/Main.astro";
 			id: 'boire',
 			type: 'circle',
 			source: 'boire',
-			//filter: ['!', ['has', 'point_count']],
 			paint: {
 				'circle-color': [
 					'match',
@@ -169,40 +183,46 @@ import Main from "../layout/Main.astro";
 			}
 		};
 
+
 		map.addLayer(sol)
 		map.addLayer(rues)
-		map.addLayer(boire)
 
-		map.on('click', 'boire', (e) => {
-			const feature = e.features?.[0];
-			const coordinates = feature.geometry.coordinates.slice();
-			const name = feature.properties?.Nom || 'Sans nom';
+		const acteurs = []
+		for(let i= 1; i<13; i++){
+			acteurs[i] = ({
+				id: `c${i}`,
+				type: 'symbol',
+				source: 'boire',
+				filter: ['==', ['get', 'Categorie'], i ],
+				layout: {
+					'icon-image': `icon-${i}`,
+					'icon-size': 0.5,
+					'icon-allow-overlap': true,
+					'icon-ignore-placement': true
+				},
+				minzoom:0,
+				maxzoom:24
+			})
+			document.getElementById('check_'+i).addEventListener('change', (e) => {
+				if(e.target.checked){
+					map.addLayer(acteurs[i])
+				}else{
+					map.removeLayer(acteurs[i].id)
+				}
+			})
+			map.on('click', `c${i}`, (e) => {
+				const feature = e.features?.[0];
+				//popdesc.click()
+				const no = feature.properties.No === '-1' ? '': feature.properties.No
+				popdescd.innerHTML = `<h4 class="text-lg">${feature.properties.Nom}<h4><p>${no} ${feature.properties.Adresse}</p><p>${catName[feature.properties.Categorie]}</p>`
+			});
+			map.on('mouseenter', `c${i}`, () => map.getCanvas().style.cursor = 'pointer');
+			map.on('mouseleave', `c${i}`, () => map.getCanvas().style.cursor = '');
+		}
 
-			new maplibregl.Popup()
-				.setLngLat(coordinates)
-				.setHTML(`<strong>${name}</strong>`)
-				.addTo(map);
-		});
-		map.on('mouseenter', 'boire', () => map.getCanvas().style.cursor = 'pointer');
-		map.on('mouseleave', 'boire', () => map.getCanvas().style.cursor = '');
+
+		// map.moveLayer('boire');
+
 	})
 
 </script>
-
-<style>
-	#map {
-		height: 100vh;
-		width: 100%;
-		overflow: hidden;
-	}
-
-	.mapboxgl-popup-content {
-		max-width: 250px;
-		pointer-events: auto;
-		background-color: white;
-	}
-
-	.mapboxgl-popup {
-		z-index: 1000;
-	}
-</style>
