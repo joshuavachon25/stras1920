@@ -3,35 +3,98 @@ import Main from "../layout/Main.astro";
 ---
 
 <Main >
+
+		<dialog id="my_modal_1" class="modal modal-bottom sm:modal-middle">
+			<div class="modal-box">
+				<div>
+					<img src="/assets/logo.png" width="">
+				</div>
+
+				<h3 class="text-lg font-bold">Bienvenue sur Stras1920!</h3>
+				<p class="text-justify">Cette carte interactive est le fruit d'un mémoire en histoire (informatique appliquée à l'histoire) explorant l'utilisation des nouvelles technologies afin de cartographie l'histoire. Pour en savoir plus sur la recherche, rendez-vous dans l'onglet Pour en savoir plus à gauche. </p>
+				<p class="text-sm pt-5 text-right ">Réalisé par <a class="link link-info" href="https://github.com/joshuavachon25/stras1920" target="_blank">Joshua Vachon</a></p>
+				<div class="modal-action">
+					<form method="dialog">
+						<button class="btn btn-active btn-success">Consulter la carte</button>
+					</form>
+				</div>
+			</div>
+		</dialog>
+
 	<div class="h-screen w-screen overflow-hidden">
 
 
 	<div class="absolute top-4 left-4 w-80">
 		<div class="collapse collapse-plus bg-base-100 border border-base-300">
-			<input type="radio" name="my-accordion-3" checked="checked" />
-			<div class="collapse-title font-semibold">À propos</div>
-			<div class="collapse-content text-sm">Bientôt disponible</div>
+			<input type="radio" name="my-accordion-3" checked/>
+			<div class="collapse-title font-semibold">Options</div>
+			<div class="collapse-content text-sm flex flex-col">
+				<fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-4">
+					<legend class="fieldset-legend">Mode</legend>
+					<div class="join mx-auto">
+						<input class="join-item btn btn-xs" type="radio" name="options" aria-label="Consultation" checked/>
+						<input class="join-item btn btn-xs" type="radio" name="options" aria-label="Cluster" />
+						<input class="join-item btn btn-xs" type="radio" name="options" aria-label="Analyse" />
+						<input class="join-item btn btn-xs" type="radio" name="options" aria-label="Heatmap" />
+					</div>
+				</fieldset>
+				<fieldset class="fieldset bg-base-200 border-base-300 rounded-box border p-4">
+					<legend class="fieldset-legend">Couches</legend>
+					<label><input type="checkbox" id="check_1" class="toggle toggle-sm"> Articles de brasserie</label>
+					<label><input type="checkbox" id="check_2" class="toggle toggle-sm"> Grossistes de vins</label>
+					<label><input type="checkbox" id="check_3" class="toggle toggle-sm"> Débits de vins</label>
+					<label><input type="checkbox" id="check_4" class="toggle toggle-sm"> Brasseurs</label>
+					<label><input type="checkbox" id="check_5" class="toggle toggle-sm"> Entrepôts/Négociants de bières</label>
+					<label><input type="checkbox" id="check_6" class="toggle toggle-sm"> Cidreries</label>
+					<label><input type="checkbox" id="check_7" class="toggle toggle-sm"> Distilleries</label>
+					<label><input type="checkbox" id="check_8" class="toggle toggle-sm"> Marchands d'houblons</label>
+					<label><input type="checkbox" id="check_9" class="toggle toggle-sm"> Malteries</label>
+					<label><input type="checkbox" id="check_10"  class="toggle toggle-sm"> Tonnelier</label>
+					<label><input type="checkbox" id="check_11" disabled class="toggle disabled toggle-sm"> Café-Brasserie</label>
+					<label><input type="checkbox" id="check_12" disabled class="toggle disabled toggle-sm"> Café-Bars</label>
+				</fieldset>
+			</div>
 		</div>
 		<div class="collapse collapse-plus bg-base-100 border border-base-300">
-			<input type="radio" name="my-accordion-3" />
-			<div class="collapse-title font-semibold">Couches de données</div>
-			<div class="collapse-content text-sm flex flex-col">
-				<label><input type="checkbox" id="check_1"> Articles de brasserie</label>
-				<label><input type="checkbox" id="check_2"> Grossistes de vins</label>
-				<label><input type="checkbox" id="check_3"> Débits de vins</label>
-				<label><input type="checkbox" id="check_4"> Brasseurs</label>
-				<label><input type="checkbox" id="check_5"> Entrepôts/Négociants de bières</label>
-				<label><input type="checkbox" id="check_6"> Cidreries</label>
-				<label><input type="checkbox" id="check_7"> Distilleries</label>
-				<label><input type="checkbox" id="check_8"> Marchands d'houblons</label>
-				<label><input type="checkbox" id="check_9"> Malterie</label>
-				<label><input type="checkbox" id="check_10"> Tonnelier</label>
-				<label><input type="checkbox" id="check_11" disabled class="disabled"> Café-Brasserie</label>
-				<label><input type="checkbox" id="check_12" disabled> Café-Bars</label>
+			<input type="radio" name="my-accordion-3"/>
+			<div class="collapse-title font-semibold">Données géospatiales</div>
+			<div class="collapse-content text-sm">
+				<p>Données vectorisées avec QGIS en se basant sur les sources suivantes:</p>
+				<ul class="list">
+					<li class="list-row">
+						<span class="text-xs">[8_FI_90] Plan de la ville de Strasbourg par Auguste Gruninger (1920) via les <a href="https://archives.strasbourg.eu/">archives de Strasbourg</a></span>
+					</li>
+					<li  class="list-row">
+						<span class="text-xs">GE D-9326 - Istra. Plan de Strasbourg (1920) via <a class="link" href="https://gallica.bnf.fr/ark:/12148/btv1b530196986">Gallica</a></span>
+					</li>
+					<li  class="list-row">
+						<span class="text-xs">1 BA 1920 - Annuaire d'adresses de la ville de Strasbourg (1920) via <a class="link" href="https://archives.strasbourg.eu/ark:/39332/vtaed3c7a9ae804cffe/daogrp/0/layout:table/idsearch:RECH_45a649bb62825c10babda3bebdd1165b">archives de Strasbourg</a></span>
+					</li>
+				</ul>
+				<p>Création d'une table de correspondance des noms dans le temps en sa basant sur l'ouvrage suivant:</p>
+				<ul class="list">
+					<li class="list-row">
+						<span class="text-xs">Dictionnaire historique des rues de Strasbourg (2012) sous la direction de Maurice Moszberger</span>
+					</li>
+				</ul>
+
+
+			</div>
+		</div>
+		<div class="collapse collapse-plus bg-base-100 border border-base-300">
+			<input type="radio" name="my-accordion-3"/>
+			<div class="collapse-title font-semibold">Pour en savoir plus...</div>
+			<div class="collapse-content text-sm">
+				<img src="/assets/logo.png">
+				<div class="flex flex-col gap-2">
+					<button class="btn btn-outline btn-info" disabled>Consulter le mémoire</button>
+					<a href='https://github.com/joshuavachon25' target="_blank" class="btn btn-outline btn-info">Github de l'auteur</a>
+					<a href='https://pypi.org/project/geocr/' target="_blank" class="btn btn-outline btn-info">Librairie GeOCR</a>
+				</div>
 			</div>
 		</div>
 	</div>
-	<div class="absolute bottom-4 left-4 p-10 bg-base-100 border border-base-300">
+	<div class="absolute bottom-4 left-4 p-10 bg-base-100 border border-base-300" id="infoPanel">
 		<div class="font-semibold" id="description_popup_name">Information sur la donnée</div>
 		<div class="text-sm" id="description_popup_desc">Sélectionnez une couche de données, puis cliquez sur une entité sur la carte</div>
 	</div>
@@ -68,30 +131,96 @@ import Main from "../layout/Main.astro";
 
 <script>
     import maplibregl from 'maplibre-gl'
+	import bbox from '@turf/bbox'
+	import voronoi from '@turf/voronoi'
+
+	let previousSelection = []
+	let layerSelection = []
+	let previousMode = undefined
+	let mode = 'Consultation'
+	const infoPanel = document.getElementById("infoPanel")
+	const modeLayers = {
+		'Consultation': [],
+		'Cluster': [],
+		'Analyse': [],
+		'Heatmap': [],
+	}
 	const catName = ['','Magasin d\'articles de brasserie', 'Grossiste de vins et spiritueux', 'Débit de vins', 'Brasseur', 'Entrepot ou négociant de bière', 'Cidrerie', 'Distillerie', 'Marchand d\'Houblons', 'Malterie', 'Tonnelier', 'Café-Brasserie', 'Café-Bars']
-	const popdesc = document.getElementById('description_popup')
-	const popdescn = document.getElementById('description_popup_name')
 	const popdescd = document.getElementById('description_popup_desc')
 	const colors = ['#fed976', '#feb24c', '#fd8d3c', '#fc4e2a', '#e31a1c', '#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c','#e31a1c'];
-    const map = new maplibregl.Map({
-        container: 'map',
-        style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
-        center: [7.756836,48.585316],
-        zoom: 14,
-        attributionControl: false
-    });
 
-	map.addControl(new maplibregl.NavigationControl({
-		visualizePitch: true,
-		visualizeRoll: true,
-		showZoom: true,
-		showCompass: true
-	}));
 
-    map.on('load', () => {
+	const map = new maplibregl.Map({
+		container: 'map',
+		style: 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json',
+		center: [7.756836,48.585316],
+		zoom: 14,
+		attributionControl: false
+	});
 
+	function manageLayers() {
+		mode == 'Consultation' ? infoPanel.classList.remove("hidden") : infoPanel.classList.add("hidden")
+		if (previousMode === 'Heatmap') {
+			map.setLayoutProperty('heatmap_global', 'visibility', 'none');
+		}
+		if (previousMode && mode !== previousMode) {
+			layerSelection.forEach((selection) => {
+				const prevLayer = modeLayers[previousMode][selection];
+				const prevUnclustered = modeLayers[previousMode][selection + 20];
+				const prevUnlabeled = modeLayers[previousMode][selection + 40];
+				const newLayer = modeLayers[mode][selection];
+				const newUnclustered = modeLayers[mode][selection + 20];
+				const newUnlabeled = modeLayers[mode][selection + 40];
+
+				if (map.getLayer(prevLayer?.id)) map.removeLayer(prevLayer.id);
+				if (previousMode === 'Cluster' && map.getLayer(prevUnclustered?.id)) map.removeLayer(prevUnclustered.id);
+				if (previousMode === 'Cluster' && map.getLayer(prevUnlabeled?.id)) map.removeLayer(prevUnlabeled.id);
+
+				if (newLayer && !map.getLayer(newLayer.id)) map.addLayer(newLayer);
+				if (mode === 'Cluster' && newUnclustered && !map.getLayer(newUnclustered.id)) map.addLayer(newUnclustered);
+				if (mode === 'Cluster' && newUnlabeled && !map.getLayer(newUnlabeled.id)) map.addLayer(newUnlabeled);
+			});
+		} else {
+			const added = layerSelection.filter(x => !previousSelection.includes(x));
+			const removed = previousSelection.filter(x => !layerSelection.includes(x));
+
+			added.forEach((layer) => {
+				const main = modeLayers[mode][layer];
+				const unclustered = mode === 'Cluster' ? modeLayers[mode][layer + 20] : null;
+				const labels = mode === 'Cluster' ? modeLayers[mode][layer + 40] : null;
+
+				if (main && !map.getLayer(main.id)) map.addLayer(main);
+				if (unclustered && !map.getLayer(unclustered.id)) map.addLayer(unclustered);
+				if (labels && !map.getLayer(labels.id)) map.addLayer(labels);
+			});
+
+			removed.forEach((layer) => {
+				const main = modeLayers[mode][layer];
+				const unclustered = mode === 'Cluster' ? modeLayers[mode][layer + 20] : null;
+				const labels = mode === 'Cluster' ? modeLayers[mode][layer + 40] : null;
+
+				if (main && map.getLayer(main.id)) map.removeLayer(main.id);
+				if (unclustered && map.getLayer(unclustered.id)) map.removeLayer(unclustered.id);
+				if (labels && map.getLayer(labels.id)) map.removeLayer(labels.id);
+			});
+		}
+
+		if (mode === 'Heatmap') {
+			const categories = layerSelection.map(Number);
+			map.setFilter('heatmap_global', ['in', 'Categorie', ...categories]);
+			map.setLayoutProperty('heatmap_global', 'visibility', 'visible');
+		}
+
+
+		previousMode = mode;
+		previousSelection = [...layerSelection];
+	}
+
+
+	map.on('load', () => {
+		// Chargement des sprites
 		for (let i = 1; i <= 12; i++) {
-			const url = `/assets/sprites/${i}.png`
+			const url = `/assets/sprites/${i}.png`;
 			fetch(url)
 				.then((res) => res.blob())
 				.then((blob) => createImageBitmap(blob))
@@ -102,28 +231,30 @@ import Main from "../layout/Main.astro";
 				})
 				.catch((err) => console.error(`Failed to load icon-${i}`, err));
 		}
-		const layers = map.getStyle().layers;
 
+		// Masque les couches par défaut du fond
+		const layers = map.getStyle().layers;
 		layers.forEach((layer) => {
-			if (layer.type === 'symbol' || layer.type === 'line' || (layer['source-layer'] && layer['source-layer'].includes('building'))) {
+			if (
+				layer.type === 'symbol' ||
+				layer.type === 'line' ||
+				(layer['source-layer'] && layer['source-layer'].includes('building'))
+			) {
 				map.setLayoutProperty(layer.id, 'visibility', 'none');
 			}
 		});
 
+		// Sources fixes
 		map.addSource('sol', {
 			type: 'geojson',
 			data: '/data/1920_sol.geojson'
-		})
+		});
 		map.addSource('rues', {
 			type: 'geojson',
 			data: '/data/Rues1920.geojson'
-		})
-		map.addSource('boire', {
-			type: 'geojson',
-			data: '/data/Boire1920.geojson',
-		})
+		});
 
-		const sol: maplibregl.FillLayerSpecification = {
+		map.addLayer({
 			id: 'sol',
 			type: 'fill',
 			source: 'sol',
@@ -139,90 +270,176 @@ import Main from "../layout/Main.astro";
 					'Train', '#c4c4c4',
 					'Hopital', '#e75f78',
 					'#cccccc'
-				] as any,
+				],
 				'fill-opacity': 0.99
 			}
-		}
-		const rues: maplibregl.SymbolLayerSpecification = {
-			'id': 'rues',
-			'type': 'symbol',
-			'source': 'rues',
-			"minzoom": 13.9,
-			"layout": {
-				"text-field": ["to-string", ["get", "NOM1"]],
-				"symbol-placement": "line-center",
-				"text-size": 12
-			},
-		}
-
-
-		const boire: maplibregl.CircleLayerSpecification = {
-			id: 'boire',
-			type: 'circle',
-			source: 'boire',
-			paint: {
-				'circle-color': [
-					'match',
-					['get', 'Categorie'],
-					1, '#6b81d7',
-					2, '#91c167',
-					3, '#496e2f',
-					4, '#043e47',
-					5, '#6e1414',
-					6, '#9c5e33',
-					7, '#e75f78',
-					8, '#1e848a',
-					9, '#f7a2af',
-					10, '#e75f78',
-					11, '#bda06b',
-					12, '#9b59b6',
-					'#cccccc'
-				] as any,
-				'circle-opacity': 0.8,
-				'circle-radius': 6
+		});
+		map.addLayer({
+			id: 'rues',
+			type: 'symbol',
+			source: 'rues',
+			minzoom: 13.9,
+			layout: {
+				'text-field': ['to-string', ['get', 'NOM1']],
+				'symbol-placement': 'line-center',
+				'text-size': 12
 			}
-		};
+		});
+
+		// Chargement et traitement de Boire1920
+		fetch('/data/Boire1920.geojson')
+			.then(res => res.json())
+			.then((geojson) => {
+				map.addSource('boire', {
+					type: 'geojson',
+					data: geojson
+				});
+
+				map.addLayer({
+					id: 'heatmap_global',
+					type: 'heatmap',
+					source: 'boire',
+					maxzoom: 18,
+					layout: {
+						visibility: 'none'
+					},
+					filter: ['in', 'Categorie', -1], // mis à jour dynamiquement
+					paint: {
+						'heatmap-intensity': [
+							'interpolate', ['linear'], ['zoom'],
+							0, 1,
+							18, 3
+						],
+						'heatmap-color': [
+							'interpolate',
+							['linear'],
+							['heatmap-density'],
+							0, 'rgba(33,102,172,0)',
+							0.2, 'rgb(103,169,207)',
+							0.4, 'rgb(209,229,240)',
+							0.6, 'rgb(253,219,199)',
+							0.8, 'rgb(239,138,98)',
+							1, 'rgb(178,24,43)'
+						],
+						'heatmap-radius': 30,
+						'heatmap-opacity': 0.8
+					}
+				});
 
 
-		map.addLayer(sol)
-		map.addLayer(rues)
+				for (let i = 1; i <= 12; i++) {
+					const catFeatures = geojson.features.filter(f => f.properties.Categorie === i);
 
-		const acteurs = []
-		for(let i= 1; i<13; i++){
-			acteurs[i] = ({
-				id: `c${i}`,
-				type: 'symbol',
-				source: 'boire',
-				filter: ['==', ['get', 'Categorie'], i ],
-				layout: {
-					'icon-image': `icon-${i}`,
-					'icon-size': 0.5,
-					'icon-allow-overlap': true,
-					'icon-ignore-placement': true
-				},
-				minzoom:0,
-				maxzoom:24
-			})
-			document.getElementById('check_'+i).addEventListener('change', (e) => {
-				if(e.target.checked){
-					map.addLayer(acteurs[i])
-				}else{
-					map.removeLayer(acteurs[i].id)
+					// Ajout source cluster par catégorie
+					map.addSource(`boire_cluster_${i}`, {
+						type: 'geojson',
+						data: {
+							type: 'FeatureCollection',
+							features: catFeatures
+						},
+						cluster: true,
+						clusterRadius: 30,
+						clusterMaxZoom: 21
+					});
+
+					// Consultation
+					modeLayers['Consultation'][i] = {
+						id: `c${i}`,
+						type: 'symbol',
+						source: 'boire',
+						filter: ['==', ['get', 'Categorie'], i],
+						layout: {
+							'icon-image': `icon-${i}`,
+							'icon-size': 0.5,
+							'icon-allow-overlap': true,
+							'icon-ignore-placement': true
+						},
+						minzoom: 0,
+						maxzoom: 24
+					};
+
+					// Cluster
+					modeLayers['Cluster'][i] = {
+						id: `cl${i}`,
+						type: 'circle',
+						source: `boire_cluster_${i}`,
+						filter: ['has', 'point_count'],
+						paint: {
+							'circle-color': colors[i],
+							'circle-radius': [
+								'step',
+								['get', 'point_count'],
+								5,
+								2,
+								20,
+								5,
+								30
+							]
+						}
+					};
+
+					// Cluster - unclustered points
+					modeLayers['Cluster'][i + 20] = {
+						id: `cl${i}_u`,
+						type: 'circle',
+						source: `boire_cluster_${i}`,
+						filter: ['!', ['has', 'point_count']],
+						paint: {
+							'circle-color': colors[i],
+							'circle-radius': 5
+						}
+					};
+
+					modeLayers['Cluster'][i + 40] = {
+						id: `cl${i}_count`,
+						type: 'symbol',
+						source: `boire_cluster_${i}`,
+						filter: ['has', 'point_count'],
+						layout: {
+							'text-field': ['get', 'point_count'],
+							'text-font': ['Open Sans Bold', 'Arial Unicode MS Bold'],
+							'text-size': 12
+						},
+						paint: {
+							'text-color': '#000',
+							'text-halo-color': '#fff',
+							'text-halo-width': 1
+						}
+					};
+
+					// Coche pour activer la couche
+					document.getElementById(`check_${i}`).addEventListener('change', (e) => {
+						if (e.target.checked) {
+							if (!layerSelection.includes(i)) layerSelection.push(i);
+						} else {
+							layerSelection = layerSelection.filter(item => item !== i);
+						}
+						manageLayers();
+					});
+
+					// Interaction pour Consultation
+					map.on('click', `c${i}`, (e) => {
+						const feature = e.features?.[0];
+						const no = feature.properties.No === '-1' ? '' : feature.properties.No;
+						popdescd.innerHTML = `<h4 class="text-lg">${feature.properties.Nom}</h4><p>${no} ${feature.properties.Adresse}</p><p>${catName[feature.properties.Categorie]}</p>`;
+					});
+					map.on('mouseenter', `c${i}`, () => map.getCanvas().style.cursor = 'pointer');
+					map.on('mouseleave', `c${i}`, () => map.getCanvas().style.cursor = '');
 				}
-			})
-			map.on('click', `c${i}`, (e) => {
-				const feature = e.features?.[0];
-				//popdesc.click()
-				const no = feature.properties.No === '-1' ? '': feature.properties.No
-				popdescd.innerHTML = `<h4 class="text-lg">${feature.properties.Nom}<h4><p>${no} ${feature.properties.Adresse}</p><p>${catName[feature.properties.Categorie]}</p>`
 			});
-			map.on('mouseenter', `c${i}`, () => map.getCanvas().style.cursor = 'pointer');
-			map.on('mouseleave', `c${i}`, () => map.getCanvas().style.cursor = '');
-		}
+
+		// Changement de mode
+		document.querySelectorAll('input[name="options"]').forEach((radio) => {
+			radio.addEventListener('change', () => {
+				const selected = document.querySelector('input[name="options"]:checked');
+				mode = selected.getAttribute('aria-label');
+				manageLayers();
+			});
+		});
+	});
 
 
-		// map.moveLayer('boire');
-
-	})
-
+	window.addEventListener('DOMContentLoaded', () => {
+		document.getElementById('my_modal_1').showModal();
+	});
 </script>
